@@ -493,6 +493,61 @@
     });
 
     document.getElementById("year").textContent = new Date().getFullYear();
+    
+const heroJerseys = [
+  {
+    name: "REAL MADRID",
+    image: "https://placehold.co/400x500/ffffff/111111?text=REAL+MADRID"
+  },
+  {
+    name: "BARCELONA",
+    image: "https://placehold.co/400x500/173b8a/ffffff?text=BARCELONA"
+  },
+  {
+    name: "MANCHESTER UNITED",
+    image: "https://placehold.co/400x500/cc0000/ffffff?text=MANCHESTER+UNITED"
+  },
+  {
+    name: "ARSENAL",
+    image: "https://placehold.co/400x500/cc0000/ffffff?text=ARSENAL"
+  },
+  {
+    name: "CHELSEA",
+    image: "https://placehold.co/400x500/034694/ffffff?text=CHELSEA"
+  },
+  {
+    name: "LIVERPOOL",
+    image: "https://placehold.co/400x500/c8102e/ffffff?text=LIVERPOOL"
+  },
+  {
+    name: "PSG",
+    image: "https://placehold.co/400x500/004170/ffffff?text=PSG"
+  },
+  {
+    name: "BAYERN MUNICH",
+    image: "https://placehold.co/400x500/d00027/ffffff?text=BAYERN+MUNICH"
+  }
+];
+
+let heroJerseyIndex = 0;
+
+setInterval(() => {
+  const image = document.getElementById("heroJerseyImage");
+  const name = document.getElementById("heroClubName");
+
+  if (!image || !name) return;
+
+  heroJerseyIndex = (heroJerseyIndex + 1) % heroJerseys.length;
+
+  image.style.opacity = "0";
+
+  setTimeout(() => {
+    image.src = heroJerseys[heroJerseyIndex].image;
+    name.textContent = heroJerseys[heroJerseyIndex].name;
+    image.style.opacity = "1";
+  }, 400);
+}, 3000);
+
     loadProducts();
   </script>
 </body>
