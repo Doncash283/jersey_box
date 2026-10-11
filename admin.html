@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JERSEY BOX | Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10140f;
+      --panel: #1b211a;
+      --lime: #d4ff3f;
+      --text: #f5f5ed;
+      --muted: #a6aea0;
+      --border: #343c30;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { font-size: 22px; font-weight: 900; }
+    .brand span { color: var(--lime); }
+    main { max-width: 1000px; padding: 24px 16px; margin: auto; }
+    h1 { font-size: 28px; margin: 8px 0; }
+    h2 { font-size: 19px; }
+    p, .muted { color: var(--muted); line-height: 1.5; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    label { display: block; font-size: 13px; margin: 13px 0 7px; }
+    input, select, textarea {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      color: var(--text);
+      background: #10140f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+    }
+    textarea { min-height: 85px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--lime);
+      color: #11150e;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    button.danger { background: #532a28; color: white; }
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 15px; }
+    .hidden { display: none !important; }
+    .notice { padding: 12px; border-radius: 8px; background: #293023; overflow-wrap: anywhere; }
+    .item {
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .item:last-child { border-bottom: 0; }
+    .item strong { display: block; margin-bottom: 6px; }
+    .price { color: var(--lime); font-weight: bold; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      header { padding: 16px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">JERSEY <span>BOX.</span> <small style="font-size:11px;color:#a6aea0">ADMIN</small></div>
+    <button id="signOut" class="secondary hidden" type="button">Sign out</button>
+  </header>
+
+  <main>
+    <section id="loginPanel" class="panel">
+      <h1>Admin login</h1>
+      <p>Sign in with the administrator account you created in Supabase.</p>
+      <label for="email">Admin email</label>
+      <input id="email" type="email" autocomplete="username" placeholder="you@example.com">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="Your password">
+      <div class="actions">
+        <button id="loginButton" type="button">Sign in</button>
+      </div>
+      <p id="loginMessage" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <h1>Dashboard</h1>
+      <p>Manage your football jersey catalogue.</p>
+      <div id="status" class="notice" role="status" aria-live="polite">Loading admin access…</div>
+
+      <section class="panel">
+        <h2 id="formHeading">Add a jersey</h2>
+        <p>Use an image URL for now. Image upload can be added after Supabase Storage is configured.</p>
+        <form id="productForm">
+          <input type="hidden" id="productId">
+          <div class="grid">
+            <div>
+              <label for="name">Jersey name *</label>
+              <input id="name" required maxlength="120" placeholder="e.g. Nigeria Home Jersey">
+            </div>
+            <div>
+              <label for="category">Category *</label>
+              <select id="category" required>
+                <option>European Clubs</option>
+                <option>Player &amp; Customised</option>
+                <option>Retro &amp; Vintage</option>
+                <option>National Teams</option>
+                <option>Nigerian &amp; African Clubs</option>
+              </select>
+            </div>
+            <div>
+              <label for="price">Price (₦) *</label>
+              <input id="price" type="number" min="0" step="1" required>
+            </div>
+            <div>
+              <label for="stock">Stock quantity *</label>
+              <input id="stock" type="number" min="0" step="1" value="0" required>
+            </div>
+          </div>
+          <label for="sizes">Sizes (comma-separated)</label>
+          <input id="sizes" placeholder="S, M, L, XL, XXL">
+          <label for="imageUrl">Image URL</label>
+          <input id="imageUrl" type="url" placeholder="https://example.com/jersey.jpg">
+          <label for="description">Description</label>
+          <textarea id="description" maxlength="1000" placeholder="Jersey details, season, fit, etc."></textarea>
+          <label><input id="featured" type="checkbox" style="display:inline;width:auto"> Feature this jersey</label>
+          <div class="actions">
+            <button id="saveButton" type="submit">Save jersey</button>
+            <button id="cancelEdit" class="secondary hidden" type="button">Cancel edit</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h2>Jerseys</h2>
+          <button id="refreshProducts" class="secondary" type="button">Refresh</button>
+        </div>
+        <div id="productsList">Your products will appear here after loading.</div>
+      </section>
+
+      <section class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h2>Customer orders</h2>
+          <button id="refreshOrders" class="secondary" type="button">Refresh orders</button>
+        </div>
+        <div id="ordersList">Orders will appear here after loading.</div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module">
+    // Use the Supabase Project URL and Publishable key from your own project.
+    const SUPABASE_URL = "https://gmjhbqodzscrodyitcfk.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EH46HAmu8BlzTTeo0bVnLQ_-vlHbEUR";
+
+    const $ = id => document.getElementById(id);
+    const loginPanel = $("loginPanel");
+    const dashboard = $("dashboard");
+    let supabase;
+    let currentUser = null;
+    let products = [];
+
+    function message(id, text) {
+      $(id).textContent = text;
+    }
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat("en-NG", {
+        style: "currency", currency: "NGN", maximumFractionDigits: 0
+      }).format(Number(value) || 0);
+    }
+
+    function safeImageUrl(value) {
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:" ? url.href : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function element(tag, text, className) {
+      const node = document.createElement(tag);
+      node.textContent = text ?? "";
+      if (className) node.className = className;
+      return node;
+    }
+
+    async function init() {
+      if (SUPABASE_URL.includes("PASTE_") ||
+          SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")) {
+        message("loginMessage",
+          "Setup needed: add your Supabase Project URL and Publishable key in this file.");
+        return;
+      }
+
+      try {
+        const { createClient } = await import(
+          "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+        );
+        supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (data.session) {
+          currentUser = data.session.user;
+          await showDashboard();
+        }
+      } catch (error) {
+        message("loginMessage", "Could not initialize Supabase. Check the URL, key, and internet connection.");
+      }
+    }
+
+    $("loginButton").addEventListener("click", async () => {
+      if (!supabase) {
+        message("loginMessage", "Please add your Supabase URL and Publishable key first.");
+        return;
+      }
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      if (!email || !password) {
+        message("loginMessage", "Enter your admin email and password.");
+        return;
+      }
+
+      $("loginButton").disabled = true;
+      message("loginMessage", "Signing in…");
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        currentUser = data.user;
+        await showDashboard();
+      } catch (error) {
+        message("loginMessage", error.message || "Sign-in failed. Check your details.");
+      } finally {
+        $("loginButton").disabled = false;
+      }
+    });
+
+    async function showDashboard() {
+      loginPanel.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      $("signOut").classList.remove("hidden");
+      message("status", "Checking your administrator permissions…");
+
+      const { data: admin, error } = await supabase
+        .from("jersey_admins").select("user_id")
+        .eq("user_id", currentUser.id).maybeSingle();
+
+      if (error || !admin) {
+        message("status", "This account is not registered as a JERSEY BOX admin. Access to products and orders is blocked.");
+        $("productForm").classList.add("hidden");
+        $("productsList").textContent = "No admin access.";
+        $("ordersList").textContent = "No admin access.";
+        return;
+      }
+
+      $("productForm").classList.remove("hidden");
+      message("status", "Signed in with administrator access.");
+      await Promise.all([loadProducts(), loadOrders()]);
+    }
+
+    $("signOut").addEventListener("click", async () => {
+      if (supabase) await supabase.auth.signOut();
+      currentUser = null;
+      dashboard.classList.add("hidden");
+      loginPanel.classList.remove("hidden");
+      $("signOut").classList.add("hidden");
+      message("loginMessage", "You have signed out.");
+    });
+
+    async function loadProducts() {
+      const list = $("productsList");
+      list.replaceChildren(element("p", "Loading products…", "muted"));
+      const { data, error } = await supabase.from("jersey_products")
+        .select("id,name,category,description,price,image_url,sizes,stock,featured,archived")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        list.replaceChildren(element("p",
+          "Could not load products: " + error.message, "muted"));
+        return;
+      }
+
+      products = data || [];
+      list.replaceChildren();
+      if (!products.length) {
+        list.append(element("p", "No jerseys yet. Add your first jersey above.", "muted"));
+        return;
+      }
+
+      for (const product of products) {
+        const item = element("div", null, "item");
+        const title = element("strong", product.name);
+        const details = element("p",
+          `${product.category} · ${formatPrice(product.price)} · Stock: ${product.stock}` +
+          (product.archived ? " · Archived" : "") +
+          (product.featured ? " · Featured" : ""), "muted");
+        item.append(title, details);
+
+        const actions = element("div", null, "actions");
+        const edit = element("button", "Edit", "secondary");
+        edit.type = "button";
+        edit.addEventListener("click", () => editProduct(product));
+        const archive = element("button",
+          product.archived ? "Restore" : "Archive", "secondary");
+        archive.type = "button";
+        archive.addEventListener("click", () => toggleArchive(product));
+        actions.append(edit, archive);
+        item.append(actions);
+        list.append(item);
+      }
+    }
+
+    function editProduct(product) {
+      $("productId").value = product.id;
+      $("name").value = product.name || "";
+      $("category").value = product.category || "European Clubs";
+      $("price").value = product.price ?? 0;
+      $("stock").value = product.stock ?? 0;
+      $("sizes").value = Array.isArray(product.sizes)
+        ? product.sizes.join(", ")
+        : (product.sizes || "");
+      $("imageUrl").value = product.image_url || "";
+      $("description").value = product.description || "";
+      $("featured").checked = Boolean(product.featured);
+      $("formHeading").textContent = "Edit jersey";
+      $("saveButton").textContent = "Update jersey";
+      $("cancelEdit").classList.remove("hidden");
+      $("productForm").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function resetForm() {
+      $("productForm").reset();
+      $("productId").value = "";
+      $("stock").value = 0;
+      $("formHeading").textContent = "Add a jersey";
+      $("saveButton").textContent = "Save jersey";
+      $("cancelEdit").classList.add("hidden");
+    }
+
+    $("cancelEdit").addEventListener("click", resetForm);
+
+    $("productForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!currentUser) return;
+
+      const image = $("imageUrl").value.trim();
+      if (image && !safeImageUrl(image)) {
+        message("status", "Please use a valid HTTPS image URL.");
+        return;
+      }
+
+      const price = Number($("price").value);
+      const stock = Number($("stock").value);
+      if (!Number.isSafeInteger(price) || price < 0 ||
+          !Number.isSafeInteger(stock) || stock < 0) {
+        message("status", "Price and stock must be non-negative whole numbers.");
+        return;
+      }
+
+      const rawSizes = $("sizes").value.split(",").map(s => s.trim()).filter(Boolean);
+      const payload = {
+        name: $("name").value.trim(),
+        category: $("category").value,
+        description: $("description").value.trim(),
+        price,
+        stock,
+        image_url: image || null,
+        sizes: rawSizes,
+        featured: $("featured").checked,
+        archived: false
+      };
+
+      if (!payload.name) {
+        message("status", "Enter a jersey name.");
+        return;
+      }
+
+      $("saveButton").disabled = true;
+      try {
+        const id = $("productId").value;
+        const result = id
+          ? await supabase.from("jersey_products").update(payload).eq("id", id).select()
+          : await supabase.from("jersey_products").insert(payload).select();
+
+        if (result.error) throw result.error;
+        if (!result.data || result.data.length === 0) {
+          throw new Error("No row was changed. Check your admin database policies.");
+        }
+
+        resetForm();
+        message("status", "Jersey saved successfully.");
+        await loadProducts();
+      } catch (error) {
+        message("status", "Could not save jersey: " + (error.message || "Unknown error"));
+      } finally {
+        $("saveButton").disabled = false;
+      }
+    });
+
+    async function toggleArchive(product) {
+      const action = product.archived ? "restore" : "archive";
+      if (!confirm(`Are you sure you want to ${action} "${product.name}"?`)) return;
+      const { data, error } = await supabase.from("jersey_products")
+        .update({ archived: !product.archived })
+        .eq("id", product.id).select("id");
+
+      if (error || !data?.length) {
+        message("status", "Could not update product: " + (error?.message || "Permission denied."));
+        return;
+      }
+      message("status", `Jersey ${action}d.`);
+      await loadProducts();
+    }
+
+    async function loadOrders() {
+      const list = $("ordersList");
+      list.replaceChildren(element("p", "Loading orders…", "muted"));
+      const { data, error } = await supabase.from("jersey_orders")
+        .select("id,customer_name,customer_phone,customer_address,total_amount,status,created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        list.replaceChildren(element("p", "Could not load orders: " + error.message, "muted"));
+        return;
+      }
+      list.replaceChildren();
+      if (!data?.length) {
+        list.append(element("p", "No customer orders yet.", "muted"));
+        return;
+      }
+
+      const allowedStatuses = ["pending", "confirmed", "processing", "shipped", "completed", "cancelled"];
+      for (const order of data) {
+        const item = element("div", null, "item");
+        item.append(
+          element("strong", order.customer_name || "Customer"),
+          element("p",
+            `${formatPrice(order.total_amount)} · ${order.status || "pending"} · ` +
+            new Date(order.created_at).toLocaleString(), "muted"),
+          element("p", `${order.customer_phone || ""}\n${order.customer_address || ""}`, "muted")
+        );
+
+        const status = document.createElement("select");
+        for (const value of allowedStatuses) {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          option.selected = value === (order.status || "pending");
+          status.append(option);
+        }
+
+        const update = element("button", "Update status");
+        update.type = "button";
+        update.addEventListener("click", async () => {
+          const { error: updateError } = await supabase.from("jersey_orders")
+            .update({ status: status.value }).eq("id", order.id);
+          if (updateError) {
+            message("status", "Could not update order: " + updateError.message);
+          } else {
+            message("status", "Order status updated.");
+            await loadOrders();
+          }
+        });
+        const actions = element("div", null, "actions");
+        actions.append(status, update);
+        item.append(actions);
+        list.append(item);
+      }
+    }
+
+    $("refreshProducts").addEventListener("click", loadProducts);
+    $("refreshOrders").addEventListener("click", loadOrders);
+
+    init();
+  </script>
+</body>
+</html>
