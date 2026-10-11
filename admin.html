@@ -278,7 +278,10 @@ const { data: admin, error } = await supabase
 
 console.log("Current user ID:", currentUser.id);
 console.log("Admin record:", admin);
-console.log("Admin lookup error:", error);
+console.log(
+  "ADMIN ERROR DETAILS:",
+  JSON.stringify(error, null, 2)
+);
 
 
       
