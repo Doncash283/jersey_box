@@ -269,9 +269,17 @@
       $("signOut").classList.remove("hidden");
       message("status", "Checking your administrator permissions…");
 
-      const { data: admin, error } = await supabase
-        .from("jersey_admins").select("user_id")
-        .eq("user_id", currentUser.id).maybeSingle();
+      
+const { data: admin, error } = await supabase
+  .from("jersey_admins")
+  .select("user_id")
+  .eq("user_id", currentUser.id)
+  .maybeSingle();
+
+console.log("Current user ID:", currentUser.id);
+console.log("Admin record:", admin);
+console.log("Admin lookup error:", error);
+
 
       if (error || !admin) {
         message("status", "This account is not registered as a JERSEY BOX admin. Access to products and orders is blocked.");
