@@ -341,7 +341,26 @@ if (error || !admin) {
           `${product.category} · ${formatPrice(product.price)} · Stock: ${product.stock}` +
           (product.archived ? " · Archived" : "") +
           (product.featured ? " · Featured" : ""), "muted");
-        item.append(title, details);
+        item.append(title);
+
+const imageUrl = safeImageUrl(product.image_url);
+if (imageUrl) {
+  const img = document.createElement("img");
+  img.src = imageUrl;
+  img.alt = product.name || "Jersey";
+  img.loading = "lazy";
+  img.style.width = "140px";
+  img.style.height = "160px";
+  img.style.objectFit = "contain";
+  img.style.display = "block";
+  img.style.margin = "12px 0";
+  img.onerror = () => {
+    img.style.display = "none";
+  };
+  item.append(img);
+}
+
+item.append(details);
 
         const actions = element("div", null, "actions");
         const edit = element("button", "Edit", "secondary");
