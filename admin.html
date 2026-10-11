@@ -281,13 +281,21 @@ console.log("Admin record:", admin);
 console.log("Admin lookup error:", error);
 
 
-      if (error || !admin) {
-        message("status", "This account is not registered as a JERSEY BOX admin. Access to products and orders is blocked.");
-        $("productForm").classList.add("hidden");
-        $("productsList").textContent = "No admin access.";
-        $("ordersList").textContent = "No admin access.";
-        return;
-      }
+      
+console.log("Signed-in user ID:", currentUser.id);
+console.log("Admin query result:", admin);
+console.log("Admin query error:", error);
+
+if (error || !admin) {
+  message(
+    "status",
+    "Admin check failed. Open the browser console to see the details."
+  );
+  $("productForm").classList.add("hidden");
+  $("productsList").textContent = "No admin access.";
+  $("ordersList").textContent = "No admin access.";
+  return;
+}
 
       $("productForm").classList.remove("hidden");
       message("status", "Signed in with administrator access.");
