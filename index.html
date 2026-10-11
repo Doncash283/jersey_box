@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101510">
+  <meta name="description" content="JERSEY BOX — premium football jerseys, custom shirts, retro classics and national team kits.">
+  <title>JERSEY BOX | Wear Your Club</title>
+  <style>
+    :root {
+      --bg: #101510;
+      --panel: #191f19;
+      --lime: #d7ff45;
+      --white: #f8f8f3;
+      --muted: #a5afa2;
+      --line: #343c32;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    .topline {
+      padding: 10px 16px;
+      background: var(--lime);
+      color: #101510;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 19px 5%;
+      border-bottom: 1px solid var(--line);
+    }
+    .logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
+    .logo span { color: var(--lime); }
+    .cart {
+      background: var(--lime);
+      color: var(--bg);
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 4px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .hero {
+      padding: 65px 6% 58px;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 32px;
+      align-items: center;
+      background: radial-gradient(ellipse at 80% 45%, #293526 0%, var(--bg) 65%);
+    }
+    .eyebrow {
+      color: var(--lime);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: .95;
+      letter-spacing: -4px;
+      margin: 20px 0;
+    }
+    h1 em { color: var(--lime); font-style: normal; }
+    .hero p { color: var(--muted); line-height: 1.8; max-width: 470px; }
+    .primary {
+      display: inline-block;
+      background: var(--lime);
+      color: var(--bg);
+      padding: 15px 20px;
+      border: 0;
+      border-radius: 4px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+    .hero-art {
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #293626, #151b14);
+      border: 1px solid #394735;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .jersey-icon { font-size: clamp(100px, 19vw, 190px); filter: drop-shadow(0 25px 22px #0008); }
+    .art-caption {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--lime);
+      font-weight: 800;
+    }
+    .section { padding: 42px 5%; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+    h2 { font-size: 27px; margin: 8px 0 0; letter-spacing: -1px; }
+    .categories { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 28px; }
+    .category {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .category.active, .category:hover {
+      background: var(--lime);
+      color: var(--bg);
+      border-color: var(--lime);
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .product {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+    .product-visual {
+      height: 180px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #293226, #1a2119);
+      font-size: 76px;
+    }
+    .product-info { padding: 16px; }
+    .tag {
+      color: var(--lime);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .product h3 { font-size: 15px; line-height: 1.4; margin: 9px 0; }
+    .price { font-weight: 900; font-size: 17px; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .product-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .product-actions button {
+      flex: 1;
+      padding: 10px 5px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .add { background: var(--lime); color: var(--bg); border-color: var(--lime) !important; }
+    .custom {
+      margin: 10px 5%;
+      padding: 30px;
+      background: var(--lime);
+      color: var(--bg);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .custom h2 { margin: 0 0 8px; }
+    .custom p { margin: 0; font-size: 13px; line-height: 1.6; }
+    .custom a {
+      background: var(--bg);
+      color: var(--white);
+      padding: 14px;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    footer {
+      padding: 35px 5%;
+      margin-top: 40px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .empty { color: var(--muted); padding: 20px 0; }
+    dialog {
+      background: var(--panel);
+      color: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      width: min(420px, 92vw);
+    }
+    dialog::backdrop { background: #000b; }
+    dialog h2 { margin-top: 0; }
+    dialog label { display: block; margin: 14px 0 6px; font-size: 12px; color: var(--muted); }
+    dialog input, dialog select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--white);
+    }
+    .dialog-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .secondary { background: transparent; color: var(--white); border: 1px solid var(--line); padding: 14px; border-radius: 4px; cursor: pointer; margin-top: 16px; }
+    @media (max-width: 650px) {
+      .hero { grid-template-columns: 1fr; padding-top: 45px; }
+      .hero-art { min-height: 210px; }
+      h1 { letter-spacing: -2px; }
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .product-visual { height: 140px; font-size: 60px; }
+      .product-info { padding: 12px; }
+      .custom { padding: 22px; flex-direction: column; align-items: flex-start; }
+      .section { padding: 35px 4%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">JERSEY BOX · YOUR CLUB. YOUR COLOURS. YOUR CULTURE.</div>
+  <header>
+    <a class="logo" href="#">JERSEY<span>BOX.</span></a>
+    <button class="cart" id="cartButton">BAG (<span id="cartCount">0</span>)</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">For the love of the game</div>
+        <h1>WEAR YOUR<br><em>CLUB.</em></h1>
+        <p>Discover football shirts made for match day, street style and the memories that never fade. Find your colours at JERSEY BOX.</p>
+        <a class="primary" href="#shop">EXPLORE JERSEYS ↘</a>
+      </div>
+      <div class="hero-art">
+        <div class="jersey-icon">👕</div>
+        <div class="art-caption">THE BEAUTIFUL GAME, WORN PROUDLY.</div>
+      </div>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="section-head">
+        <div><div class="eyebrow">Find your colours</div><h2>THE JERSEY LINEUP</h2></div>
+        <span class="muted">Fresh kits. Timeless passion.</span>
+      </div>
+      <div class="categories" id="categories">
+        <button class="category active" data-category="All">All Jerseys</button>
+        <button class="category" data-category="European Clubs">European Clubs</button>
+        <button class="category" data-category="Player & Customised">Player & Customised</button>
+        <button class="category" data-category="Retro & Vintage">Retro & Vintage</button>
+        <button class="category" data-category="National Teams">National Teams</button>
+        <button class="category" data-category="Nigerian & African Clubs">Nigerian & African Clubs</button>
+      </div>
+      <div class="products" id="products">
+        <div class="empty">Loading jerseys…</div>
+      </div>
+    </section>
+
+    <section class="custom">
+      <div>
+        <h2>MAKE IT YOURS.</h2>
+        <p>Want your name, number or favourite player on the back?<br>Message us about a customised jersey.</p>
+      </div>
+      <a id="customLink" href="https://wa.me/2349042783628" target="_blank" rel="noopener">CUSTOMISE ON WHATSAPP ↗</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><a class="logo" href="#">JERSEY<span>BOX.</span></a><br>Football culture. Every day.</div>
+      <div>Orders confirmed personally on WhatsApp.<br>Instagram: <a href="https://www.instagram.com/jersey__box/" target="_blank" rel="noopener">@jersey__box</a></div>
+    </div>
+    <p>© <span id="year"></span> JERSEY BOX. All rights reserved.</p>
+  </footer>
+
+  <dialog id="sizeDialog">
+    <form id="sizeForm">
+      <h2>Add to your bag</h2>
+      <p id="selectedName" class="muted"></p>
+      <label for="size">Choose size</label>
+      <select id="size" required>
+        <option value="">Select a size</option>
+        <option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+      </select>
+      <label for="quantity">Quantity</label>
+      <input id="quantity" type="number" min="1" max="10" value="1" required>
+      <div class="dialog-actions">
+        <button class="primary" type="submit">ADD TO BAG</button>
+        <button class="secondary" type="button" id="cancelDialog">CANCEL</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="cartDialog">
+    <h2>Your bag</h2>
+    <div id="cartItems"></div>
+    <p><strong>Total: <span id="cartTotal">₦0</span></strong></p>
+    <button class="primary" id="checkoutButton">ORDER ON WHATSAPP</button>
+    <button class="secondary" id="closeCart">CONTINUE SHOPPING</button>
+  </dialog>
+
+  <script>
+    const WHATSAPP_NUMBER = "2349042783628";
+    const SUPABASE_URL = "https://gmjhbqodzscrodyitcfk.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_EH46HAmu8BlzTTeo0bVnLQ_-vlHbEUR";
+
+    const demoProducts = [
+      { id:"demo1", name:"Classic European Club Jersey", category:"European Clubs", description:"A must-have for your match-day rotation.", price:25000, sizes:["S","M","L","XL","XXL"], stock:10, featured:true },
+      { id:"demo2", name:"Custom Name & Number Jersey", category:"Player & Customised", description:"Make your shirt personal with your chosen name and number.", price:30000, sizes:["S","M","L","XL","XXL"], stock:10, featured:true },
+      { id:"demo3", name:"Retro Football Classic", category:"Retro & Vintage", description:"A timeless look inspired by football history.", price:28000, sizes:["S","M","L","XL","XXL"], stock:10, featured:false },
+      { id:"demo4", name:"National Team Jersey", category:"National Teams", description:"Rep your nation with pride.", price:25000, sizes:["S","M","L","XL","XXL"], stock:10, featured:false },
+      { id:"demo5", name:"Nigerian & African Club Jersey", category:"Nigerian & African Clubs", description:"Celebrate football across Nigeria and Africa.", price:22000, sizes:["S","M","L","XL","XXL"], stock:10, featured:false },
+      { id:"demo6", name:"Match Day Essentials Jersey", category:"European Clubs", description:"A fresh pick for your football collection.", price:25000, sizes:["S","M","L","XL","XXL"], stock:10, featured:false }
+    ];
+
+    let products = [...demoProducts];
+    let cart = [];
+    let selectedProduct = null;
+    let activeCategory = "All";
+
+    const money = amount => "₦" + Number(amount).toLocaleString("en-NG");
+    const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[char]));
+
+    async function loadProducts() {
+      if (!SUPABASE_URL.startsWith("https://") ||
+          SUPABASE_PUBLISHABLE_KEY.startsWith("PASTE_")) {
+        renderProducts();
+        return;
+      }
+      try {
+        const response = await fetch(
+          SUPABASE_URL + "/rest/v1/jersey_products?select=id,name,category,description,price,image_url,sizes,stock,featured&archived=eq.false&order=featured.desc,created_at.desc",
+          { headers: {
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+          }}
+        );
+        if (!response.ok) throw new Error("Could not load product catalogue");
+        const rows = await response.json();
+        if (rows.length) products = rows;
+      } catch (error) {
+        console.warn(error);
+      }
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const shown = products.filter(product =>
+        activeCategory === "All" || product.category === activeCategory
+      );
+      const container = document.getElementById("products");
+      if (!shown.length) {
+        container.innerHTML = '<div class="empty">No jerseys in this category yet. Check back soon.</div>';
+        return;
+      }
+      container.innerHTML = shown.map(product => `
+        <article class="product">
+          <div class="product-visual">${product.image_url
+            ? `<img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}" style="width:100%;height:100%;object-fit:cover">`
+            : "👕"}</div>
+          <div class="product-info">
+            <div class="tag">${escapeHtml(product.category)}</div>
+            <h3>${escapeHtml(product.name)}</h3>
+            <p class="muted">${escapeHtml(product.description || "")}</p>
+            <div class="price">${money(product.price)}</div>
+            <div class="product-actions">
+              <button class="add" data-add="${escapeHtml(product.id)}">ADD TO BAG</button>
+              <button data-order="${escapeHtml(product.id)}">ORDER</button>
+            </div>
+          </div>
+        </article>`).join("");
+    }
+
+    document.getElementById("categories").addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      document.querySelectorAll(".category").forEach(item =>
+        item.classList.toggle("active", item === button)
+      );
+      renderProducts();
+    });
+
+    document.getElementById("products").addEventListener("click", event => {
+      const add = event.target.closest("[data-add]");
+      const order = event.target.closest("[data-order]");
+      const product = products.find(item => item.id === (add || order)?.dataset.add ||
+        item.id === (order || add)?.dataset.order);
+      if (!product) return;
+      if (order) {
+        const message = `Hello JERSEY BOX! I want to order:\n${product.name}\nPrice: ${money(product.price)}\nPlease confirm available sizes and delivery.`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+        return;
+      }
+      selectedProduct = product;
+      document.getElementById("selectedName").textContent = product.name + " — " + money(product.price);
+      document.getElementById("sizeDialog").showModal();
+    });
+
+    document.getElementById("sizeForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const size = document.getElementById("size").value;
+      const quantity = Number(document.getElementById("quantity").value);
+      if (!selectedProduct || !size || quantity < 1) return;
+      cart.push({ product:selectedProduct, size, quantity });
+      document.getElementById("sizeDialog").close();
+      document.getElementById("sizeForm").reset();
+      updateCart();
+    });
+
+    document.getElementById("cancelDialog").addEventListener("click", () =>
+      document.getElementById("sizeDialog").close()
+    );
+    document.getElementById("cartButton").addEventListener("click", () => {
+      updateCart();
+      document.getElementById("cartDialog").showModal();
+    });
+    document.getElementById("closeCart").addEventListener("click", () =>
+      document.getElementById("cartDialog").close()
+    );
+
+    function updateCart() {
+      document.getElementById("cartCount").textContent =
+        cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cartTotal").textContent =
+        money(cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0));
+      document.getElementById("cartItems").innerHTML = cart.length
+        ? cart.map((item, index) => `
+          <div style="padding:12px 0;border-bottom:1px solid var(--line)">
+            <strong>${escapeHtml(item.product.name)}</strong><br>
+            <span class="muted">Size ${escapeHtml(item.size)} · Qty ${item.quantity}</span><br>
+            ${money(item.product.price * item.quantity)}
+            <button class="secondary" data-remove="${index}" style="margin-top:5px;padding:7px">Remove</button>
+          </div>`).join("")
+        : '<p class="empty">Your bag is empty.</p>';
+    }
+
+    document.getElementById("cartItems").addEventListener("click", event => {
+      const button = event.target.closest("[data-remove]");
+      if (!button) return;
+      cart.splice(Number(button.dataset.remove), 1);
+      updateCart();
+    });
+
+    document.getElementById("checkoutButton").addEventListener("click", () => {
+      if (!cart.length) {
+        alert("Your bag is empty. Add a jersey first.");
+        return;
+      }
+      const lines = cart.map(item =>
+        `- ${item.product.name} | Size ${item.size} | Qty ${item.quantity} | ${money(item.product.price * item.quantity)}`
+      );
+      const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+      const message = `Hello JERSEY BOX! I'd like to place an order:\n\n${lines.join("\n")}\n\nTotal: ${money(total)}\n\nPlease confirm availability, delivery fee and payment instructions.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    loadProducts();
+  </script>
+</body>
+</html>
